@@ -25,14 +25,28 @@ app.use(function validateBearerToken(req, res, next) {
 });
 
 function handleGetMovie(req, res) {
-  const film_title = req.query.film_title;
+  let film_title = req.query.film_title;
+  let genre = req.query.genre;
+  let country = req.query.country;
+  let avg_vote = req.query.avg_vote;
+  let result = MOVIEDEX;
 
   if (film_title) {
-    result = result.filter(
-      (item) => item.film_title.toLowerCase().indexOf(film_title) >= 0
-    );
+    film_title = film_title.toLowerCase();
+    result = result.filter((item) => item.film_title.toLowerCase().indexOf(film_title) >= 0);
   }
-
+  if (genre) {
+    genre = genre.toLowerCase();
+    result = result.filter((item) => item.genre.toLowerCase().indexOf(genre) >= 0);
+  }
+  if (country) {
+    country = country.toLowerCase();
+    result = result.filter((item) => item.country.toLowerCase().indexOf(country) >= 0);
+  }
+  if (avg_vote) {
+    avg_vote = parseInt(avg_vote);
+    result = result.filter((item) => item.avg_vote >= avg_vote);
+  }
   res.json(result);
 }
 
